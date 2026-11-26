@@ -1,0 +1,101 @@
+<Window x:Class="GameTranslate.Windows.SubtitleOverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:GameTranslate.Controls"
+        Title="GameTranslate Overlay"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        ResizeMode="NoResize"
+        KeyDown="Window_KeyDown">
+
+    <Grid x:Name="RootGrid">
+        <!-- Edit-mode border & resize handles (only visible when unlocked for positioning) -->
+        <Border x:Name="EditFrame"
+                Visibility="Collapsed"
+                Background="#28FFD800"
+                BorderBrush="#FFD800"
+                BorderThickness="2"
+                CornerRadius="8"
+                MouseLeftButtonDown="EditFrame_MouseLeftButtonDown">
+            <Grid>
+                <Border VerticalAlignment="Top"
+                        HorizontalAlignment="Center"
+                        Background="#DD141418"
+                        CornerRadius="0,0,8,8"
+                        Padding="12,4">
+                    <TextBlock Text="Arraste para mover  •  Canto inferior direito redimensiona  •  ESC para travar"
+                               Foreground="#FFD800"
+                               FontSize="12"
+                               FontWeight="SemiBold"/>
+                </Border>
+
+                <!-- Bottom-right resize grip -->
+                <Thumb x:Name="ResizeThumb"
+                       Width="22"
+                       Height="22"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       Cursor="SizeNWSE"
+                       DragDelta="ResizeThumb_DragDelta">
+                    <Thumb.Template>
+                        <ControlTemplate TargetType="Thumb">
+                            <Border Background="#DDFFD800"
+                                    CornerRadius="4,0,6,0"
+                                    Margin="2">
+                                <TextBlock Text="◢"
+                                           Foreground="#111114"
+                                           FontSize="13"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Thumb.Template>
+                </Thumb>
+            </Grid>
+        </Border>
+
+        <!-- Actual Subtitle Container -->
+        <Grid x:Name="SubtitleContainer"
+              VerticalAlignment="Bottom"
+              HorizontalAlignment="Stretch"
+              Margin="10,4,10,8"
+              Opacity="0">
+            <Border x:Name="BackdropBorder"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Background="#B8000000"
+                    CornerRadius="8"
+                    Padding="20,10">
+                <StackPanel HorizontalAlignment="Center">
+                    <!-- Optional subtle English original line -->
+                    <TextBlock x:Name="OriginalTextBlock"
+                               Visibility="Collapsed"
+                               Text=""
+                               Foreground="#CCDDDDDD"
+                               FontSize="13"
+                               FontStyle="Italic"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,4"/>
+
+                    <!-- Classic Yellow TV/Series Subtitle -->
+                    <controls:OutlinedTextBlock x:Name="SubtitleTextBlock"
+                                                HorizontalAlignment="Center"
+                                                Text=""
+                                                FontFamily="Arial"
+                                                FontSize="32"
+                                                FontWeight="Bold"
+                                                StrokeThickness="4.5"
+                                                Fill="#FFD800"
+                                                Stroke="Black"
+                                                DropShadowEnabled="True"
+                                                TextAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

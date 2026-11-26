@@ -1,0 +1,15 @@
+# Build & Publish outputs
+bin/
+obj/
+dist/
+*.exe
+*.dll
+*.pdb
+
+# User & IDE files
+.vs/
+*.user
+*.suo
+GameTranslate.json
+_selftest_result.txt
+_tmp_*

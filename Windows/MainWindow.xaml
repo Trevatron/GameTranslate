@@ -95,6 +95,16 @@
             <Setter Property="CaretBrush" Value="#FFD800"/>
         </Style>
 
+        <Style TargetType="PasswordBox">
+            <Setter Property="Background" Value="#12141C"/>
+            <Setter Property="Foreground" Value="#F2F4F8"/>
+            <Setter Property="BorderBrush" Value="#32384C"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="CaretBrush" Value="#FFD800"/>
+        </Style>
+
         <Style TargetType="ComboBox">
             <Setter Property="Background" Value="#252A38"/>
             <Setter Property="Foreground" Value="#11131A"/>
@@ -465,8 +475,8 @@
 
                             <!-- DeepL Config -->
                             <StackPanel x:Name="DeepLPanel" Visibility="Collapsed" Margin="0,0,0,12">
-                                <TextBlock Text="Chave API DeepL (chave gratuita termina com :fx)" Foreground="{StaticResource MutedText}" FontSize="12" Margin="0,0,0,4"/>
-                                <TextBox x:Name="DeepLKeyBox" TextChanged="TranslatorText_Changed"/>
+                                <TextBlock Text="Chave API DeepL (chave gratuita termina com :fx — protegida via Windows DPAPI)" Foreground="{StaticResource MutedText}" FontSize="12" Margin="0,0,0,4"/>
+                                <PasswordBox x:Name="DeepLKeyBox" PasswordChanged="TranslatorPassword_Changed"/>
                             </StackPanel>
 
                             <!-- OpenAI / Ollama Config -->
@@ -477,8 +487,8 @@
                                 <TextBlock Text="Modelo (ex: llama3.2, qwen2.5, gpt-4o-mini)" Foreground="{StaticResource MutedText}" FontSize="12" Margin="0,0,0,4"/>
                                 <TextBox x:Name="OpenAiModelBox" TextChanged="TranslatorText_Changed" Margin="0,0,0,8"/>
 
-                                <TextBlock Text="API Key (opcional para Ollama local)" Foreground="{StaticResource MutedText}" FontSize="12" Margin="0,0,0,4"/>
-                                <TextBox x:Name="OpenAiKeyBox" TextChanged="TranslatorText_Changed"/>
+                                <TextBlock Text="API Key (opcional para Ollama local — protegida via Windows DPAPI)" Foreground="{StaticResource MutedText}" FontSize="12" Margin="0,0,0,4"/>
+                                <PasswordBox x:Name="OpenAiKeyBox" PasswordChanged="TranslatorPassword_Changed"/>
                             </StackPanel>
 
                             <Button Content="🗑  Limpar Cache de Traduções" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" Click="ClearCacheButton_Click" Margin="0,4,0,0"/>

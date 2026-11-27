@@ -1,5 +1,7 @@
+using System.IO;
 using System.Text.Json;
 using GameTranslate.Models;
+using GameTranslate.Services;
 using Xunit;
 
 namespace GameTranslate.Tests;
@@ -80,5 +82,55 @@ public sealed class SettingsAndModelsTests
         Assert.Equal(0.85, restored.BackdropOpacity);
         Assert.Equal(120, restored.CaptureIntervalMs);
         Assert.False(restored.UseGamingGlossary);
+    }
+
+    [Fact]
+    public void Runtime_IsNet10OrHigher()
+    {
+        Assert.True(Environment.Version.Major >= 10, $"Expected .NET 10+, got {Environment.Version}");
+    }
+
+    [Fact]
+    public void SettingsService_DpapiProtectsAndRestoresSecrets()
+    {
+        const string secret = "deepl-secret-key-12345:fx";
+        string encrypted = SettingsService.ProtectSecret(secret);
+
+        Assert.StartsWith("dpapi:", encrypted);
+        Assert.DoesNotContain(secret, encrypted);
+        Assert.Equal(secret, SettingsService.UnprotectSecret(encrypted));
+        // Backward compatibility with legacy plaintext config values
+        Assert.Equal("legacy-plain-key", SettingsService.UnprotectSecret("legacy-plain-key"));
+    }
+
+    [Fact]
+    public void SettingsService_SaveAndLoad_EncryptsApiKeysOnDisk()
+    {
+        string tempFile = Path.Combine(Path.GetTempPath(), $"gt_settings_test_{Guid.NewGuid():N}.json");
+        try
+        {
+            var svc = new SettingsService(tempFile);
+            var settings = new AppSettings
+            {
+                DeepLApiKey = "test-deepl-key-xyz:fx",
+                OpenAiApiKey = "sk-test-openai-secret-999"
+            };
+
+            svc.Save(settings);
+
+            string rawJson = File.ReadAllText(tempFile);
+            Assert.DoesNotContain("test-deepl-key-xyz:fx", rawJson);
+            Assert.DoesNotContain("sk-test-openai-secret-999", rawJson);
+            Assert.Contains("dpapi:", rawJson);
+
+            AppSettings reloaded = svc.Load();
+            Assert.Equal("test-deepl-key-xyz:fx", reloaded.DeepLApiKey);
+            Assert.Equal("sk-test-openai-secret-999", reloaded.OpenAiApiKey);
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+                File.Delete(tempFile);
+        }
     }
 }

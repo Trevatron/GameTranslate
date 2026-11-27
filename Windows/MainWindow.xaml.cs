@@ -190,10 +190,10 @@ public partial class MainWindow : Window
         GamingGlossaryCheck.IsChecked = _settings.UseGamingGlossary;
         SelectComboByTag(SourceLangCombo, _settings.SourceLanguage);
         SelectComboByTag(TargetLangCombo, _settings.TargetLanguage);
-        DeepLKeyBox.Text = _settings.DeepLApiKey;
+        DeepLKeyBox.Password = _settings.DeepLApiKey;
         OpenAiEndpointBox.Text = _settings.OpenAiEndpoint;
         OpenAiModelBox.Text = _settings.OpenAiModel;
-        OpenAiKeyBox.Text = _settings.OpenAiApiKey;
+        OpenAiKeyBox.Password = _settings.OpenAiApiKey;
         UpdateTranslatorPanelsVisibility();
     }
 
@@ -245,10 +245,10 @@ public partial class MainWindow : Window
         if (TargetLangCombo.SelectedItem is ComboBoxItem tgtItem)
             _settings.TargetLanguage = tgtItem.Tag?.ToString() ?? "pt-BR";
 
-        _settings.DeepLApiKey = DeepLKeyBox.Text?.Trim() ?? string.Empty;
+        _settings.DeepLApiKey = DeepLKeyBox.Password?.Trim() ?? string.Empty;
         _settings.OpenAiEndpoint = OpenAiEndpointBox.Text?.Trim() ?? string.Empty;
         _settings.OpenAiModel = OpenAiModelBox.Text?.Trim() ?? string.Empty;
-        _settings.OpenAiApiKey = OpenAiKeyBox.Text?.Trim() ?? string.Empty;
+        _settings.OpenAiApiKey = OpenAiKeyBox.Password?.Trim() ?? string.Empty;
 
         _settingsService.Save(_settings);
         _overlayWindow.ApplySettings(_settings);
@@ -499,6 +499,8 @@ public partial class MainWindow : Window
     }
 
     private void TranslatorText_Changed(object sender, TextChangedEventArgs e) => SaveAndApplySettings();
+
+    private void TranslatorPassword_Changed(object sender, RoutedEventArgs e) => SaveAndApplySettings();
 
     private void ClearCacheButton_Click(object sender, RoutedEventArgs e)
     {
